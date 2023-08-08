@@ -3,7 +3,12 @@ import './App.css';
 import Header from './Header'
 import Footer from './Footer'
 import Employees from './Employees'
+import GroupedTeamMembers from './GroupedTeamMembers'
+import Nav from './Nav'
+import NotFound from './NotFound'
 import {useState, useEffect} from 'react'
+import {BrowserRouter as Router, Routes, Route} from 'react-router-dom'
+
 
 
 
@@ -116,17 +121,27 @@ function App() {
 
   return (
     <div className="App">
-      <Header 
-        selectedTeam={selectedTeam}
-        teamMemberCount = {employees.filter((employee) => employee.teamName===selectedTeam).length}
-      />
-      <Employees 
-        employees={employees}
-        selectedTeam={selectedTeam}
-        handleTeamSelectionChange={handleTeamSelectionChange}
-        handleEmployeeCardClick={handleEmployeeCardClick}
-      />
-      <Footer />
+      <Router>
+        <Nav />
+        <Header 
+          selectedTeam={selectedTeam}
+          teamMemberCount = {employees.filter((employee) => employee.teamName===selectedTeam).length}
+        />
+        <Routes>
+          <Route path='/' element={<Employees 
+                                  employees={employees}
+                                  selectedTeam={selectedTeam}
+                                  handleTeamSelectionChange={handleTeamSelectionChange}
+                                  handleEmployeeCardClick={handleEmployeeCardClick}
+                                />}
+          />
+          <Route path='/GroupedElementMembers' element={<GroupedTeamMembers employees={employees} selectedTeam={selectedTeam} setTeam={setTeam} />} />
+          <Route path='*' element={<NotFound />}/>
+        </Routes>
+        
+        <Footer /> 
+      </Router>
+      
     </div>
   );
 }
